@@ -82,8 +82,7 @@
                 width="16"
                 height="16"
                 aria-hidden="true"
-              >
-              </svg>
+              ></svg>
               Conclusion
             </a>
           </li>
@@ -206,8 +205,10 @@
             existing test scenarios within the IoT platform repository to
             extract their semantic behaviour. This process is done with the
             following workflow (fig. 1), making use of a Large Language Model
-            (LLM). Workflow:
+            (LLM). This project was done using a locally hosted Ollama gpt-oss
+            (120b).
           </p>
+          <strong>Workflow:</strong>
           <ul>
             <li>Extract test cases from Home Assistant GitHub repository</li>
             <li>
@@ -222,6 +223,38 @@
               LLM output modelled as a Finite State Machine (FSM) (fig. 3)
             </li>
           </ul>
+          <h5>Explanation of pre-process</h5>
+          <p>
+            The biggest issue with schema-based extraction is that most data
+            comes in an unorganised manner. The initial parsing method of the
+            knowledge base becomes very important in understanding the semantics
+            of the data. In this case, since the input data are test cases taken
+            from an IoT platform repository, our goal with pre-processing will
+            be to understand the semantic behaviour of the code.
+          </p>
+          <p>
+            Since the current sample data is only within the Home Assistant
+            repository,
+
+            <a href="https://docs.python.org/3/library/ast.html"
+              >Python's AST library</a
+            >
+            is very useful for this exact purpose. In order to observe the
+            expected behaviour of the device in the test scenarios, the
+            <b>assert statements</b> can be extracted and parsed into
+            <b>"states" of the device</b>, with <b>transitional actions</b> in
+            between them, taken from contextual information in the rest of the
+            source code.
+          </p>
+          <h5>Output schema design</h5>
+          <p>
+            In order to aid in the device simulation, the output of the LLM must
+            be in a format that is easy to parse and understand. Hence, an
+            output schema must be defined and input into the LLM prompt. The
+            output schema used was formatted as a JSON file using
+            <a href="https://pydantic.dev/">Pydantic</a>, a data validation
+            library that allows for easy, object-oriented JSON schema design.
+          </p>
           <br />
           <div class="row">
             <div class="col d-flex justify-content-center align-items-center">
@@ -310,6 +343,13 @@
               correct device behaviour, and 91/111 (82%) of the output device
               states contained the correct data, as shown in figure 4.
             </p>
+            <p>
+              Additionally, 39/46 (85%) of the test cases have the correct
+              transition recall test, meaning to say that they have the correct
+              number of state transitions. Of the 7 remaining test cases, 6 of
+              them have extra transitions and 1 of them have lesser transitions
+              than expected.
+            </p>
           </div>
         </div>
 
@@ -342,7 +382,24 @@
               </div>
             </div>
             <p>
-              Further improvements can be made to the extraction method by
+              The input format of the data greatly affects how the LLM
+              understands it and behaves accordingly. The crux of the problem is
+              optimising the level of pre-processing used while keeping the
+              process general enough to parse a wide variety of code.
+            </p>
+            <p>
+              One of the biggest challenges was in the classification of assert
+              statements using the AST library. It was found that if the raw
+              assert statement was input into the LLM prompt, it was prone to
+              mistakes such as missing or incorrect values. The most consistent
+              behaviour was found when <b>serialising the information</b> as a
+              Python dictionary entry, by taking the Left and Right values of
+              the assert statement. However, this is only possible if the assert
+              statement is an instance of ast.Compare. This has the consequence
+              of omitting other types of assert statements.
+            </p>
+            <p>
+              Overall, further improvements can be made to the extraction method by
               having better pre-processing and organisation as well as
               exploration of prompt engineering for the LLM.
             </p>
