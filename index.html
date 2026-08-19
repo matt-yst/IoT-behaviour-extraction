@@ -13,9 +13,45 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <nav class="navbar navbar-dark bg-dark d-md-none">
+      <div class="container-fluid">
+        <span class="navbar-brand"> SURE 2026 </span>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mobileNav"
+          aria-controls="mobileNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      </div>
+      <div class="collapse" id="mobileNav">
+        <ul class="navbar-nav px-5">
+          <li class="nav-item">
+            <a class="nav-link" href="#intro">Introduction</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#method">Methodology</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#result">Results</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#discuss">Discussion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#conclude">Conclusion</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <main class="d-flex flex-nowrap align-items-start">
       <aside
-        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark sticky-top"
+        class="d-none d-md-flex flex-column flex-shrink-0 p-3 text-bg-dark sticky-top"
         style="width: 280px; min-height: 100vh"
       >
         <div
